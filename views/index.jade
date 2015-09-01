@@ -7,9 +7,8 @@ block content
       .col-md-12
         h1 카톡 공개채팅 링크 공유기!
         .custom
-          //a#modal-294744.btn-primary(href='#modal-container-294744', role='button', data-toggle='modal') 링크 공유하기!
+          // BEGIN Modal
           button.btn.btn-info.btn-lg(type='button', data-toggle='modal', data-target='#modal-container-294744') 링크 공유하기
-
           #modal-container-294744.modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
             .modal-dialog
               .modal-content
@@ -31,6 +30,7 @@ block content
                     br
                     input.btn-lg.btn-primary(type='submit', value='저장하기')
                     input.btn-lg(type='button', data-dismiss='modal', value='닫기')
+          // END Modal
         .container-fluid
           .row
             //.col-md-2
@@ -84,9 +84,9 @@ block content
                     //td= val.id
                     td {{item.name}}
                     td
-                      a(href= '{{item.url}}') {{item.url}}
+                      a(href= '{{item.url}}', target='_blank') {{item.url}}
                     //td= val.url
-                    td {{item.created}}
+                    td {{item.created | date:'yyyy-MM-dd HH:mm:ss Z'}}
 
 
   script(src='js/app/app.js')

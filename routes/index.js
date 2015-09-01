@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+var roomCtrler = require('../controllers/room');
+var categoryCtrler = require('../controllers/category');
+
 var Room = require('../models/rooms');
 
 
@@ -9,30 +12,8 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
-
-//router.get('/api/rooms/:id', function(req, res, next) {
-//  var roomId = req.params.id;
-//  if (roomId) {
-//    Room.find({ _id: roomId}).exec(function(err, results) {
-//      res.send(200, JSON.stringify(results));
-//    });
-//  } else {
-//    res.send(0, JSON.stringify({}));
-//  }
-//});
-
-router.get('/api/rooms', function(req, res, next) {
-  Room.find({}).sort([['created', 'descending']]).exec(function(err, results) {
-    res.send(200, JSON.stringify(results));
-  });
-});
-
-router.get('/rooms', function(req, res, next) {
-  Room.find({}).exec(function(err, results) {
-
-    res.render('index', { title: 'Express', results: results });
-  });
-});
+router.use('/api/rooms', roomCtrler);
+router.use('/api/category', categoryCtrler);
 
 router.post('/rooms', function(req, res, nexst) {
   var name = req.body.name;
