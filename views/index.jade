@@ -87,7 +87,8 @@ block content
                       a(href= '{{item.url}}', target='_blank') {{item.url}}
                     //td= val.url
                     td {{item.created | date:'yyyy-MM-dd HH:mm:ss Z'}}
-
+    //pagination.pagination-sm(boundary-links='true', total-items=100, ng-model=1, previous-text='‹', next-text='›', first-text='«', last-text='»')
+  include _paginate
 
   script(src='js/app/app.js')
   script(src='js/app/controllers.js')
