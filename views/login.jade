@@ -1,0 +1,5 @@
+.container-fluid(ng-controller='AuthCtrl')
+  .row
+    .col-md-12
+       button.btn.btn-info.btn-lg(type='button', ng-click='login()')
+        | {{authorized == true ? '로그아웃하기' : '로그인 하기'}}
