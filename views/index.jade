@@ -1,11 +1,13 @@
 extends layout
 
 block content
+  include login
 
+  h1 카톡 공개채팅 링크 공유기!
   .container-fluid(ng-controller='AppCtrl')
     .row
       .col-md-12
-        h1 카톡 공개채팅 링크 공유기!
+
         .custom
           // BEGIN Modal
           button.btn.btn-info.btn-lg(type='button', data-toggle='modal', data-target='#modal-container-294744') 링크 공유하기
@@ -18,7 +20,7 @@ block content
                   h4#myModalLabel.modal-title
                     | 링크와 제목을 입력해주세요.
                 .modal-body
-                  form(name='createRoomForm', action='rooms', method='post')
+                  form(name='createRoomForm')
                     h5(ng-bind='form.name') {{form.name}}
                     | 제목:
                     input.my-input(ng-model='form.name', name='name', aria-describedby='inputDescription' style='width: 80%;', type='text' required)
@@ -28,8 +30,8 @@ block content
                     input.my-input(ng-model='form.url', name='url', type='url', aria-describedby='inputDescription', style='width: 80%;' required)
                     br
                     br
-                    input.btn-lg.btn-primary(type='submit', value='저장하기')
-                    input.btn-lg(type='button', data-dismiss='modal', value='닫기')
+                    input.btn-lg.btn-primary(type='button', data-dismiss='modal', value='저장하기', , ng-click='createRoom()')
+                    input.btn-lg.btn-warning(type='button', data-dismiss='modal', value='닫기')
           // END Modal
         .container-fluid
           .row

@@ -12,34 +12,41 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
-router.use('/api/rooms', roomCtrler);
-router.use('/api/category', categoryCtrler);
+// route rooms
+router.get('/api/rooms', function(req, res) {
+  roomCtrler.allRooms(function(err, results){
+    if (null === err) {
+      res.status(200).send(JSON.stringify(results));
+    } else {
+      res.status(500).send(err.message);
+    }
+  })
+});
 
-router.post('/rooms', function(req, res, nexst) {
+router.post('/api/rooms', function(req, res) {
   var name = req.body.name;
   var url = req.body.url;
-  var room = new Room({ name: name, url: url});
-  room.save(function(err, result) {
+  roomCtrler.createRoom(name, url, function(err, result) {
     if (err) {
-      if (err.code === 11000) {
-        // dupplicated
-        res.status(err.status || 500);
-        res.render('error', {
-          message: "이미 존재하는 링크입니다",
-          error: err
-        });
-      } else {
-        res.status(err.status || 500);
-        res.render('error', {
-          message: err.message,
-          error: err
-        });
-      }
+      res.status(500).send(err.message);
     } else {
-      res.redirect('/');
-      //res.send(200, JSON.stringify(result));
+      res.status(200).send(JSON.stringify(result));
     }
   });
 });
+
+
+
+// TODO?
+router.get('/oauth', function(req, res, next){
+  console.log("======= called!");
+  res.send(200);
+});
+
+router.post('/oauth', function(req, res, next){
+  console.log("======= called!");
+  res.send(200);
+});
+
 
 module.exports = router;

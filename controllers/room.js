@@ -1,20 +1,32 @@
-/**
- * Created by nothing on 15. 9. 1..
- */
-var express = require('express');
-// create a router
-var router = express.Router();
-
 var Room = require('../models/rooms');
 
-router.get('/', function(req, res) {
+var allRooms = function(cb) {
     Room.find({}).sort([['created', 'descending']]).exec(function(err, results) {
-        res.send(200, JSON.stringify(results));
+        cb(err, results);
     });
-});
+}
 
+var createRoom =  function(name, url, cb) {
+    var room = new Room({ name: name, url: url});
+    room.save(function(err, result) {
+        if (err) {
+            if (err.code === 11000) {
+                // dupplicated
+                var error = new Error("이미 존재하는 링크입니다.");
+                cb(error, null);
+            } else {
+                cb(err, null);
+            }
+        } else {
+            cb(null, room);
+        }
+    });
+}
 /**
  * Module exports.
  */
 
-module.exports = router;
+module.exports = {
+    createRoom: createRoom,
+    allRooms: allRooms
+}

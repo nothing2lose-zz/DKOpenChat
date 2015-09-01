@@ -1,6 +1,13 @@
 'use strict';
 
 var app = angular.module("DKOpenChat", []);
+
+/* WARNNING */
+Array.prototype.insert = function (index, item) {
+    this.splice(index, 0, item);
+};
+
+// API
 app.service('apiService', function ($http) {
   var promise;
   var myService = {
@@ -19,6 +26,7 @@ app.service('apiService', function ($http) {
     },
     postRoom: function(name, url) {
         var promise = $http.post('/api/rooms', { name: name, url: url }).then(function (response) {
+            console.log("----------------------")
             console.log(response);
             return response.data;
         });
@@ -28,18 +36,41 @@ app.service('apiService', function ($http) {
   return myService;
 });
 
+// Kakao
+app.service('kakaoService', function() {
+    Kakao.init('8e733c4e965021e9c7775cf635eba63f');
+    var svc = {
+        login:  function(cb) {
+            Kakao.Auth.login({
+                success: function (authObj) {
+                    console.log(JSON.stringify(authObj, null, 4));
+                    cb(null, authObj);
+                },
+                fail: function (err) {
+                    //alert(JSON.stringify(err))
+                    cb(err, null);
+                }
+            });
+        }
+    };
+    return svc;
+});
 
-app.controller("AppCtrl", function($scope, $http, apiService) {
-  $scope.rooms = [];
 
-  $scope.form = { name: "", url: "" };
+app.controller("AppCtrl", function($scope, $http, apiService, kakaoService) {
+  $scope.rooms = []; // room list
+  $scope.form = { name: "", url: "" }; // post room form
 
-  $scope.isValidForm = function () {
-    return ($scope.form.name && $scope.form.url);
-  }
+  $scope.createRoom = function () {
+      apiService.postRoom($scope.form.name, $scope.form.url).then(
 
-  $scope.createRoom = function (name, url) {
-
+          function(result){
+              $scope.rooms.insert(0, result)
+          },
+          function (err) {
+              alert(JSON.stringify(err.data));
+              console.log("====== fail to create!");
+          });
   };
 
   // data initialize
@@ -51,17 +82,19 @@ app.controller("AppCtrl", function($scope, $http, apiService) {
   });
 
 
-    // pagination control
-    $scope.totalItems = 64;
-    $scope.currentPage = 4;
-    $scope.maxSize = 5;
 
-    $scope.setPage = function (pageNo) {
-        $scope.currentPage = pageNo;
-    };
+});
 
-    $scope.bigTotalItems = 175;
-    $scope.bigCurrentPage = 1;
-
-
+app.controller("AuthCtrl", function($scope, kakaoService) {
+    $scope.authorized = false;
+    $scope.login = function() {
+        kakaoService.login(function(err, result) {
+            if (null === err && result) {
+                $scope.authorized = true;
+                if (!$scope.$$phase) $scope.$apply();
+            }
+            console.log("kakao login result");
+            console.log(result);
+        })
+    }
 });
