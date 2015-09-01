@@ -10,7 +10,7 @@
 
 
 
-var dkOpenChatServices = angular.module('DKOpenChat.services', ['ngResource']);
+//var app = angular.module('DKOpenChat');
 
 //dkOpenChatServices.factory('Room', ['$resource',
 //  function($resource){
@@ -19,11 +19,23 @@ var dkOpenChatServices = angular.module('DKOpenChat.services', ['ngResource']);
 //    });
 //  }]);
 //
+//
+//var services = angular.module('DKOpenChat.services', []);
+//services.service('kkk', function () { /* ... */ });
+//
+
+//app.factory('kkk', ['$resource',
+//    function($resource){
+//        return $resource('rooms/', {}, {
+//            query: {method:'GET', isArray:true}
+//        });
+//    }]);
 
 
 
 
-//app.factory('myService', function($http) {
+
+//services.service('room', function($http) {
 //  var promise;
 //  var myService = {
 //    async: function() {
@@ -44,20 +56,20 @@ var dkOpenChatServices = angular.module('DKOpenChat.services', ['ngResource']);
 //});
 
 
-dkOpenChatServices.factory('Room', function($http, $log, $q) {
-  return {
-    getRooms: function() {
-      var deferred = $q.defer();
-      $http.get('/rooms')
-          .success(function(data) {
-            deferred.resolve({
-              title: data.title,
-              cost: data.price});
-          }).error(function(msg, code) {
-            deferred.reject(msg);
-            $log.error(msg, code);
-          });
-      return deferred.promise;
-    }
-  }
-});
+//dkOpenChatServices.factory('Room', ['$http', '$log', '$q'],function($http, $log, $q) {
+//  return {
+//    getRooms: function() {
+//      var deferred = $q.defer();
+//      $http.get('/rooms')
+//          .success(function(data) {
+//            deferred.resolve({
+//              title: data.title,
+//              cost: data.price});
+//          }).error(function(msg, code) {
+//            deferred.reject(msg);
+//            $log.error(msg, code);
+//          });
+//      return deferred.promise;
+//    }
+//  }
+//});

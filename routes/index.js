@@ -6,9 +6,24 @@ var Room = require('../models/rooms');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  Room.find({}).exec(function(err, results) {
+  res.render('index');
+});
 
-    res.render('index', { title: 'Express', results: results });
+
+//router.get('/api/rooms/:id', function(req, res, next) {
+//  var roomId = req.params.id;
+//  if (roomId) {
+//    Room.find({ _id: roomId}).exec(function(err, results) {
+//      res.send(200, JSON.stringify(results));
+//    });
+//  } else {
+//    res.send(0, JSON.stringify({}));
+//  }
+//});
+
+router.get('/api/rooms', function(req, res, next) {
+  Room.find({}).sort([['created', 'descending']]).exec(function(err, results) {
+    res.send(200, JSON.stringify(results));
   });
 });
 

@@ -1,37 +1,54 @@
 'use strict';
 
-/* Controllers */
-
-angular.module("DKOpenChat", []).controller("AppCtrl", function($scope, $http) {
-  console.log("----- loaded?");
-  $http({method: 'GET', url: '/rooms'}).
-      success(function(data, status, headers, config) {
-        $scope.name = data.name;
-      }).
-      error(function(data, status, headers, config) {
-        $scope.name = 'Error!'
-      });
-
-
-  Room.getRooms().then(function(result) {
-    $scope.rooms = result;
-    console.log(result);
-  });
+var app = angular.module("DKOpenChat", []);
+app.service('apiService', function ($http) {
+  var promise;
+  var myService = {
+    getRooms: function() {
+      if ( !promise ) {
+        // $http returns a promise, which has a then function, which also returns a promise
+        promise = $http.get('/api/rooms').then(function (response) {
+          // The then function here is an opportunity to modify the response
+          console.log(response);
+          // The return value gets picked up by the then in the controller.
+          return response.data;
+        });
+      }
+      // Return the promise to the controller
+      return promise;
+    },
+    postRoom: function(name, url) {
+        var promise = $http.post('/api/rooms', { name: name, url: url }).then(function (response) {
+            console.log(response);
+            return response.data;
+        });
+        return promise;
+    }
+  };
+  return myService;
 });
 
 
-function CategoryCtrl() {
-}
-CategoryCtrl.$inject = [];
-
-
-function RoomCtrl($scope, $http, Room) {
+app.controller("AppCtrl", function($scope, $http, apiService) {
   $scope.rooms = [];
-  Room.getRooms().then(function(result) {
-    $scope.rooms = result;
+
+  $scope.form = { name: "", url: "" };
+
+  $scope.isValidForm = function () {
+    return ($scope.form.name && $scope.form.url);
+  }
+
+  $scope.createRoom = function (name, url) {
+
+  };
+
+  // data initialize
+  apiService.getRooms().then(function(result) {
+      $scope.rooms = result;
+      //if (!$scope.$$phase) $scope.$apply();
+  }, function(err) {
+      console.log("request error");
   });
 
-}
-RoomCtrl.$inject = [];
 
-
+});

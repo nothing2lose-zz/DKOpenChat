@@ -6,36 +6,33 @@ block content
     .row
       .col-md-12
         h1 카톡 공개채팅 링크 공유기!
-        a#modal-294744.btn-success(href='#modal-container-294744', role='button', data-toggle='modal') 링크 공유하기!
-        #modal-container-294744.modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-          .modal-dialog
-            .modal-content
-              .modal-header
-                button.close(type='button', data-dismiss='modal', aria-hidden='true')
-                  | ×
-                h4#myModalLabel.modal-title
-                  | 링크와 제목을 입력해주세요.
-              .modal-body
-                form(action='rooms', method='post')
-                  | 제목:
-                  input(type='text', name='name')
-                  br
-                  | 링크:
-                  input(type='text', name='url')
-                  br
-                  input(type='submit', value='Submit')
+        .custom
+          //a#modal-294744.btn-primary(href='#modal-container-294744', role='button', data-toggle='modal') 링크 공유하기!
+          button.btn.btn-info.btn-lg(type='button', data-toggle='modal', data-target='#modal-container-294744') 링크 공유하기
 
-              .modal-footer
-                button.btn.btn-default(type='button', data-dismiss='modal')
-                  | Close
-                //button.btn.btn-primary(type='button')
-                //  | Save changes
-
+          #modal-container-294744.modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+            .modal-dialog
+              .modal-content
+                .modal-header
+                  button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                    | ×
+                  h4#myModalLabel.modal-title
+                    | 링크와 제목을 입력해주세요.
+                .modal-body
+                  form(name='createRoomForm', action='rooms', method='post')
+                    h5(ng-bind='form.name') {{form.name}}
+                    | 제목:
+                    input.my-input(ng-model='form.name', name='name', aria-describedby='inputDescription' style='width: 80%;', type='text' required)
+                    br
+                    br
+                    | 링크:
+                    input.my-input(ng-model='form.url', name='url', type='url', aria-describedby='inputDescription', style='width: 80%;' required)
+                    br
+                    br
+                    input.btn-lg.btn-primary(type='submit', value='저장하기')
+                    input.btn-lg(type='button', data-dismiss='modal', value='닫기')
         .container-fluid
           .row
-            //li.thumbnail.phone-listing(ng-repeat='r in rooms')
-            //  a {{r.id}}
-
             //.col-md-2
             //  table.table.table-condensed
             //    thead
@@ -83,22 +80,14 @@ block content
                     th
                       | 생성일자
                 tbody
-                  each val in results
-                    tr
-                      //td= val.id
-                      td= val.name
-                      td
-                        a(href= val.url)= val.url
-                      //td= val.url
-                      td= val.created
+                  tr(ng-repeat='item in rooms track by item._id')
+                    //td= val.id
+                    td {{item.name}}
+                    td
+                      a(href= '{{item.url}}') {{item.url}}
+                    //td= val.url
+                    td {{item.created}}
 
-  ////script(src='js/lib/angular/angular.js')
-  ////script(src='js/lib/angular/angular-route.js')
-  //script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js')
-  //script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js')
-  //
-  //script(src='js/app/app.js')
-  //script(src='js/app/services.js')
-  //script(src='js/app/controllers.js')
-  //script(src='js/app/filters.js')
-  //script(src='js/app/directives.js')
+
+  script(src='js/app/app.js')
+  script(src='js/app/controllers.js')

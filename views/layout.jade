@@ -1,18 +1,27 @@
 doctype html
-html(ng-app='phonecatApp')
+html(ng-app='DKOpenChat')
   head
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
-    title Login Demo - Kakao JavaScript SDK
-    link(href='css/bootstrap.min.css', rel='stylesheet')
-    link(href='css/style.css', rel='stylesheet')
+    title Kakao Talk Open Chat
+
     script(src='js/jquery.min.js')
-    script(src='js/bootstrap.min.js')
-    script(src='js/scripts.js')
+
+    link(href='css/style.css', rel='stylesheet')
+    link(rel='stylesheet', href='bootstrap/dist/css/bootstrap.css')
+    //link(rel='stylesheet', href='css/app.css')
+    //link(rel='stylesheet', href='css/animations.css')
+    script(src='bootstrap/dist/js/bootstrap.min.js')
+    script(src='jquery/dist/jquery.js')
+
+    script(src='angular/angular.js')
+    script(src='angular-animate/angular-animate.js')
+    script(src='angular-route/angular-route.js')
+    script(src='angular-resource/angular-resource.js')
 
   body
-
-    block content
+    div(ng-view='')
+      block content
 
 
 

@@ -15,6 +15,7 @@ var roomSchema = mongoose.Schema({
         required: false
     }
 });
+
 roomSchema.pre('save', function(next) {
     this.created = new Date();
     next();
