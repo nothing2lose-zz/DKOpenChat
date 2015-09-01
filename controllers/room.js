@@ -11,7 +11,7 @@ var createRoom =  function(name, url, cb) {
     room.save(function(err, result) {
         if (err) {
             if (err.code === 11000) {
-                // dupplicated
+                // duplicated
                 var error = new Error("이미 존재하는 링크입니다.");
                 cb(error, null);
             } else {

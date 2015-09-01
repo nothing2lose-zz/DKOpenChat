@@ -26,8 +26,6 @@ app.service('apiService', function ($http) {
     },
     postRoom: function(name, url) {
         var promise = $http.post('/api/rooms', { name: name, url: url }).then(function (response) {
-            console.log("----------------------")
-            console.log(response);
             return response.data;
         });
         return promise;
