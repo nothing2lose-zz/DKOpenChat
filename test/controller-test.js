@@ -18,11 +18,9 @@ describe('v1 rooms', function() {
         setTimeout(function(){
             done();
         }, 300);
-        //done();
     });
 
     describe('POST /rooms', function(done) {
-        
         it('should be 200 and return inserted a room', function(done) {
             rest.post(API_URI + "/rooms", {
                 data: {
@@ -30,8 +28,9 @@ describe('v1 rooms', function() {
                     'name': "haha"
                 }
             }).on('complete', function(data) {
-                console.log("=======");
-                console.log(data);
+                done();
+            }).on('error', function(err){
+                console.log(err);
                 done();
             });
 

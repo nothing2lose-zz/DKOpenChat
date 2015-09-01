@@ -2,11 +2,11 @@ extends layout
 
 block content
 
-  .container-fluid
+  .container-fluid(ng-controller='AppCtrl')
     .row
       .col-md-12
         h1 카톡 공개채팅 링크 공유기!
-        a#modal-294744.btn(href='#modal-container-294744', role='button', data-toggle='modal') 링크 공유하기!
+        a#modal-294744.btn-success(href='#modal-container-294744', role='button', data-toggle='modal') 링크 공유하기!
         #modal-container-294744.modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
           .modal-dialog
             .modal-content
@@ -33,41 +33,44 @@ block content
 
         .container-fluid
           .row
-            .col-md-2
-              table.table.table-condensed
-                thead
-                  tr
-                    th
-                      | #
-                    th
-                      | 카테고리
-                tbody
-                  tr
-                    td
-                      | 1
-                    td
-                      | TB - Monthly
-                  tr.active
-                    td
-                      | 1
-                    td
-                      | TB - Monthly
-                  tr.success
-                    td
-                      | 2
-                    td
-                      | TB - Monthly
-                  tr.warning
-                    td
-                      | 3
-                    td
-                      | TB - Monthly
-                  tr.danger
-                    td
-                      | 4
-                    td
-                      | TB - Monthly
-            .col-md-10
+            //li.thumbnail.phone-listing(ng-repeat='r in rooms')
+            //  a {{r.id}}
+
+            //.col-md-2
+            //  table.table.table-condensed
+            //    thead
+            //      tr
+            //        th
+            //          | #
+            //        th
+            //          | 카테고리
+            //    tbody
+            //      tr
+            //        td
+            //          | 1
+            //        td
+            //          | TB - Monthly
+            //      tr.active
+            //        td
+            //          | 1
+            //        td
+            //          | TB - Monthly
+            //      tr.success
+            //        td
+            //          | 2
+            //        td
+            //          | TB - Monthly
+            //      tr.warning
+            //        td
+            //          | 3
+            //        td
+            //          | TB - Monthly
+            //      tr.danger
+            //        td
+            //          | 4
+            //        td
+            //          | TB - Monthly
+            .col-md-12
               table.table
                 thead
                   tr
@@ -91,6 +94,9 @@ block content
 
   ////script(src='js/lib/angular/angular.js')
   ////script(src='js/lib/angular/angular-route.js')
+  //script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js')
+  //script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js')
+  //
   //script(src='js/app/app.js')
   //script(src='js/app/services.js')
   //script(src='js/app/controllers.js')
