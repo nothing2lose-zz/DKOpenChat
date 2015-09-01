@@ -9,7 +9,7 @@ var api = require('../routes/index');
 
 var server = require('../bin/www');
 
-var API_URI = "http://127.0.0.1:3000"
+var API_URI = "http://localhost:3000/api"
 
 describe('v1 rooms', function() {
 
