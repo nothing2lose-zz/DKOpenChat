@@ -1,8 +1,98 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
 
+  .container-fluid
+    .row
+      .col-md-12
+        h1 카톡 공개채팅 링크 공유기!
+        a#modal-294744.btn(href='#modal-container-294744', role='button', data-toggle='modal') 링크 공유하기!
+        #modal-container-294744.modal.fade(role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+          .modal-dialog
+            .modal-content
+              .modal-header
+                button.close(type='button', data-dismiss='modal', aria-hidden='true')
+                  | ×
+                h4#myModalLabel.modal-title
+                  | 링크와 제목을 입력해주세요.
+              .modal-body
+                form(action='rooms', method='post')
+                  | 제목:
+                  input(type='text', name='name')
+                  br
+                  | 링크:
+                  input(type='text', name='url')
+                  br
+                  input(type='submit', value='Submit')
 
+              .modal-footer
+                button.btn.btn-default(type='button', data-dismiss='modal')
+                  | Close
+                //button.btn.btn-primary(type='button')
+                //  | Save changes
 
+        .container-fluid
+          .row
+            .col-md-2
+              table.table.table-condensed
+                thead
+                  tr
+                    th
+                      | #
+                    th
+                      | 카테고리
+                tbody
+                  tr
+                    td
+                      | 1
+                    td
+                      | TB - Monthly
+                  tr.active
+                    td
+                      | 1
+                    td
+                      | TB - Monthly
+                  tr.success
+                    td
+                      | 2
+                    td
+                      | TB - Monthly
+                  tr.warning
+                    td
+                      | 3
+                    td
+                      | TB - Monthly
+                  tr.danger
+                    td
+                      | 4
+                    td
+                      | TB - Monthly
+            .col-md-10
+              table.table
+                thead
+                  tr
+                    //th
+                    //  | #
+                    th
+                      | 제목
+                    th
+                      | 링크
+                    th
+                      | 생성일자
+                tbody
+                  each val in results
+                    tr
+                      //td= val.id
+                      td= val.name
+                      td
+                        a(href= val.url)= val.url
+                      //td= val.url
+                      td= val.created
+
+  ////script(src='js/lib/angular/angular.js')
+  ////script(src='js/lib/angular/angular-route.js')
+  //script(src='js/app/app.js')
+  //script(src='js/app/services.js')
+  //script(src='js/app/controllers.js')
+  //script(src='js/app/filters.js')
+  //script(src='js/app/directives.js')

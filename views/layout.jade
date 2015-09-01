@@ -4,30 +4,15 @@ html
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     title Login Demo - Kakao JavaScript SDK
-    script(src='//developers.kakao.com/sdk/js/kakao.min.js')
+    link(href='css/bootstrap.min.css', rel='stylesheet')
+    link(href='css/style.css', rel='stylesheet')
+
   body
-    a#kakao-login-btn Login
-    script.
-      // 사용할 앱의 JavaScript 키를 설정해 주세요.
-      Kakao.init('8e733c4e965021e9c7775cf635eba63f');
-      // 카카오 로그인 버튼을 생성합니다.
-      Kakao.Auth.createLoginButton({
-        container: '#kakao-login-btn',
-        success: function (authObj) {
-          alert(JSON.stringify(authObj));
-        },
-        fail: function (err) {
-          alert(JSON.stringify(err))
-        }
-      });
+
     block content
 
+    script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js')
+    script(src='js/jquery.min.js')
+    script(src='js/bootstrap.min.js')
+    script(src='js/scripts.js')
 
-
-//doctype html
-//html
-//  head
-//    title= title
-//    link(rel='stylesheet', href='/stylesheets/style.css')
-//  body
-//    block content
