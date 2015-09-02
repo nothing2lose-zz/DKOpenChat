@@ -1,0 +1,19 @@
+.container-fluid(ng-controller='MenuCtrl')
+   .row
+      .col-md-12
+         .row
+            #panel-263746.panel-group
+               .panel.panel-default
+                  .panel-heading
+                     a.panel-title(data-toggle='collapse', data-parent='#panel-263746', href='#panel-element-226906') 카테고리
+                  #panel-element-226906.panel-collapse.collapse.in
+                     //button.panel-body(style='width: 100%;', ng-click='didSelectMenu(-1)')
+                     //   | 전체보기
+                     button.panel-body(ng-repeat='menu in menus', ng-class='buttonStyleClass($index)', style='width: 100%;', ng-click='didSelectMenu($index)')
+                        | {{menu.name}}
+               .panel.panel-default
+                  .panel-heading
+                     a.panel-title(data-toggle='collapse', data-parent='#panel-263746', href='#panel-element-46987') 기타
+                  #panel-element-46987.panel-collapse.collapse
+                     .panel-body
+                        | 없음
