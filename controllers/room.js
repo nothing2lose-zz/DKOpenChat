@@ -6,7 +6,7 @@ var allRooms = function(cb) {
     });
 }
 
-var createRoom =  function(name, url, cb) {
+var createRoom = function(name, url, cb) {
     var room = new Room({ name: name, url: url});
     room.save(function(err, result) {
         if (err) {
