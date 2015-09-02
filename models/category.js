@@ -26,4 +26,4 @@ schema.pre('save', function(next) {
  * Module exports.
  */
 
-module.exports = mongoose.model('Category', schema, 'rooms');
+module.exports = mongoose.model('Category', schema, 'categories');

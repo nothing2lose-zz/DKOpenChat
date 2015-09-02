@@ -68,6 +68,11 @@ app.use(function(err, req, res, next) {
 });
 
 
+// category generate
+var categoryGenrator = require('./generateMenu');
+categoryGenrator = undefined;
+
+
 process.on('uncaughtException', function (err)  {
   console.log(" ---- BEGIN ### [Uncahught Exception] ### ---- ");
   console.log(err);

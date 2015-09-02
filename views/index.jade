@@ -6,8 +6,9 @@ block content
   h1 카톡 공개채팅 링크 공유기!
   .container-fluid(ng-controller='AppCtrl')
     .row
-      .col-md-12
-
+      .col-md-2
+        include category_menu
+      .col-md-10
         .custom
           // BEGIN Modal
           button.btn.btn-info.btn-lg(type='button', data-toggle='modal', data-target='#modal-container-294744') 링크 공유하기
@@ -20,6 +21,16 @@ block content
                   h4#myModalLabel.modal-title
                     | 링크와 제목을 입력해주세요.
                 .modal-body
+                  h5 카테고리 :
+                  .btn-group
+                    button.btn.btn-default
+                      | {{ menuForPost.name ? menuForPost.name : '기타' }}
+                    button.btn.btn-default.dropdown-toggle(data-toggle='dropdown')
+                      span.caret
+                    ul.dropdown-menu
+                      li(ng-repeat='menu in menus' ng-show='!$first')
+                        a(ng-click='didSelectCategoryInCreateForm(menu)') {{ menu.name }}
+
                   form(name='createRoomForm')
                     h5(ng-bind='form.name') {{form.name}}
                     | 제목:

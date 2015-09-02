@@ -6,8 +6,17 @@ var allRooms = function(cb) {
     });
 }
 
-var createRoom = function(name, url, cb) {
+var allRoomsByCategoryType = function (categoryType, cb) {
+    Room.find({cate_type: categoryType}).sort([['created', 'descending']]).exec(function(err, results) {
+        cb(err, results);
+    });
+}
+
+var createRoom = function(name, url, categoryType, cb) {
     var room = new Room({ name: name, url: url});
+    if (categoryType) {
+        room.cate_type = categoryType;
+    }
     room.save(function(err, result) {
         if (err) {
             if (err.code === 11000) {
@@ -28,5 +37,6 @@ var createRoom = function(name, url, cb) {
 
 module.exports = {
     createRoom: createRoom,
+    allRoomsByCategoryType: allRoomsByCategoryType,
     allRooms: allRooms
 }

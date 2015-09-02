@@ -10,6 +10,11 @@ var roomSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    cate_type: { // category type
+        type: Number,
+        default: 3000, // !! 3000 기타.
+        //required: true,
+    },
     created: {
         type: Date,
         required: false
