@@ -9,7 +9,11 @@ Array.prototype.insert = function (index, item) {
 
 // API
 app.service('apiService', function ($http) {
+    var cachedItems = [];
     var myService = {
+        items: function () {
+            return cachedItems;
+        },
         getCategories: function() {
             var promise = $http.get('/api/categories').then(function (response) {
                 return response.data;
@@ -22,8 +26,9 @@ app.service('apiService', function ($http) {
                 // $http returns a promise, which has a then function, which also returns a promise
                 promise = $http.get('/api/rooms',{ params: { category_type: categoryType } }).then(function (response) {
                     // The then function here is an opportunity to modify the response
-                    console.log(response);
+                    //console.log(response);
                     // The return value gets picked up by the then in the controller.
+                    cachedItems = response.data;
                     return response.data;
                 });
             //}
@@ -32,6 +37,7 @@ app.service('apiService', function ($http) {
         },
         postRoom: function(name, url, categoryType) {
             var promise = $http.post('/api/rooms', { name: name, url: url, category_type: categoryType }).then(function (response) {
+                cachedItems.insert(0, response.data);
                 return response.data;
             });
             return promise;
@@ -90,41 +96,52 @@ app.controller('MenuCtrl', function($rootScope, $scope, apiService) {
 
 });
 
-app.controller("AppCtrl", function($rootScope, $scope, $http, apiService, kakaoService) {
-
-    $scope.rooms = []; // room list
+app.controller('RoomCreateFormCtrl', function($rootScope, $scope, apiService) {
+    $scope.menus = [];
     $scope.form = { name: "", url: "" }; // post room form
-    $scope.menus = []; // for posting
-    $scope.menuForPost = {};
-    $scope.selectedMenu = {}; // for get request
+    $scope.selectedCategory = {};
 
     $rootScope.$on('didLoadCategory', function(event, currentMenu, menus) {
         $scope.menus = menus;
-        $scope.loadRooms();
-    });
-    $rootScope.$on('didChangeCategory', function(event, selectedMenu, menus) {
-        $scope.selectedMenu = selectedMenu;
-        $scope.menus = menus;
-        console.log(selectedMenu);
-        //console.log("==== retreive menu changed notification "+ menuIndex);
-        $scope.loadRooms();
     });
 
-    // post room
     $scope.didSelectCategoryInCreateForm = function(menu) {
-        $scope.menuForPost = menu;
+        $scope.selectedCategory = menu;
     }
 
     $scope.createRoom = function () {
-        apiService.postRoom($scope.form.name, $scope.form.url, $scope.menuForPost.type ).then(
+        apiService.postRoom($scope.form.name, $scope.form.url, $scope.selectedCategory.type ).then(
             function(result){
-                $scope.rooms.insert(0, result)
+                //
+                $rootScope.$broadcast("didChangeRoomData");
             },
             function (err) {
                 alert(JSON.stringify(err.data));
                 console.log("====== fail to create!");
             });
     };
+});
+
+app.controller("AppCtrl", function($rootScope, $scope, $http, apiService, kakaoService) {
+
+    $scope.rooms = []; // room list
+    $scope.form = { name: "", url: "" }; // post room form
+    $scope.selectedMenu = {}; // for get request
+
+    $rootScope.$on('didLoadCategory', function(event, currentMenu, menus) {
+        $scope.loadRooms();
+    });
+
+    $rootScope.$on('didChangeCategory', function(event, selectedMenu, menus) {
+        $scope.selectedMenu = selectedMenu;
+        //console.log("==== retreive menu changed notification "+ menuIndex);
+        $scope.loadRooms();
+    });
+
+    $rootScope.$on('didChangeRoomData', function(event) {
+        $scope.rooms = apiService.items();
+    });
+
 
 
     // get room
