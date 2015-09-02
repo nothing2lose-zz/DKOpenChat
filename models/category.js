@@ -3,10 +3,12 @@ var mongoose = require('mongoose');
 var schema = mongoose.Schema({
     name: {
         type: String,
+        unique: true,
         required: true
     },
     type: {
         type: Number,
+        unique: true,
         required: true
     },
     created: {
@@ -19,12 +21,6 @@ schema.pre('save', function(next) {
     this.created = new Date();
     next();
 });
-
-//roomSchema.index({ url: 1 }, { unique: true });
-//roomSchema.index({ name: 1 }, { unique: true });
-
-/* Disable auto indexing. */
-// roomSchema.set('autoIndex', false);
 
 /**
  * Module exports.
