@@ -1,9 +1,15 @@
 extends layout
 
 block content
-  //include login
 
   h1 카톡 공개채팅 링크 공유기!
+  .container-fluid(ng-controller='AppCtrl')
+    .row
+      .col-md-2
+      .col-md-8
+      .col-md-2
+        include login
+          
   .container-fluid(ng-controller='AppCtrl')
     .row
       .col-md-2
