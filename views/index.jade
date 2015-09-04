@@ -1,8 +1,11 @@
 extends layout
 
 block content
-
-  h1 카톡 공개채팅 링크 공유기!
+  .container-fluid
+    .page-header
+      h1
+        | 오픈챗
+        small 카카오톡 오픈채팅 목록 공유서비스
   include partials/navigationBar
   .container-fluid(ng-controller='AppCtrl')
     .row
