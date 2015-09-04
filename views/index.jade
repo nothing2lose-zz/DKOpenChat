@@ -33,7 +33,7 @@ block content
                       a(href= '{{item.url}}', target='_blank') {{item.url}}
                     td {{item.created | date:'yyyy.MM.dd HH:mm'}}
                     td(style="width: 50px;", ng-if='isMyRoom($index)')
-                      button(ng-click='deleteRoom($index)') 삭제
+                      button(ng-click="deleteRoom($index)" ng-confirm-click="확인을 누르면 삭제됩니다. 레알 삭제염??") 삭제
                     //td= val.url
                     //td {{item.created | date:'yyyy.MM.dd HH:mm:ss Z'}}
     //pagination.pagination-sm(boundary-links='true', total-items=100, ng-model=1, previous-text='‹', next-text='›', first-text='«', last-text='»')
