@@ -1,6 +1,9 @@
 var mongoose = require('mongoose');
 
 var roomSchema = mongoose.Schema({
+    author_id: {
+        type: Number
+    },
     url: {
         type: String,
         unique: true,
