@@ -50,14 +50,33 @@ app.service('apiService', function ($http) {
 app.service('kakaoService', function() {
     Kakao.init('8e733c4e965021e9c7775cf635eba63f');
     var svc = {
-        login:  function(cb) {
+        auth: function(cb) {
             Kakao.Auth.login({
+                persistAccessToken: true,
                 success: function (authObj) {
                     console.log(JSON.stringify(authObj, null, 4));
                     cb(null, authObj);
                 },
                 fail: function (err) {
-                    //alert(JSON.stringify(err))
+                    alert(JSON.stringify(err))
+                    cb(err, null);
+                }
+            });
+        },
+        logout: function(cb) {
+            Kakao.Auth.logout(function(){
+
+                console.log("-- logout");
+                cb(null, null);
+            });
+        },
+        getUserInfo: function(cb) {
+            Kakao.API.request({
+                url: "/v1/user/me",
+                success: function(info) {
+                    cb(null, info);
+                },
+                fail: function(err) {
                     cb(err, null);
                 }
             });
@@ -75,6 +94,15 @@ app.controller('MenuCtrl', function($rootScope, $scope, apiService) {
             return "btn-success";
         } else {
             return "";
+        }
+    }
+
+    $scope.getCurrentCategoryName = function() {
+        var menu = $scope.menus[$scope.selectedMenuIndex];
+        if (menu) {
+            return $scope.menus[$scope.selectedMenuIndex].name;
+        } else {
+            return"";
         }
     }
 
@@ -160,14 +188,24 @@ app.controller("AppCtrl", function($rootScope, $scope, $http, apiService, kakaoS
 
 app.controller("AuthCtrl", function($scope, kakaoService) {
     $scope.authorized = false;
-    $scope.login = function() {
-        kakaoService.login(function(err, result) {
+    $scope.auth = function() {
+        kakaoService.auth(function(err, result) {
             if (null === err && result) {
                 $scope.authorized = true;
                 if (!$scope.$$phase) $scope.$apply();
+
+                kakaoService.getUserInfo(function(err, result){
+
+                });
             }
             console.log("kakao login result");
             console.log(result);
         })
+    }
+    $scope.logout = function() {
+        kakaoService.logout(function(err, result){
+            $scope.authorized = false;
+            if (!$scope.$$phase) $scope.$apply();
+        });
     }
 });
