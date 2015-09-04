@@ -159,9 +159,8 @@ app.controller('RoomCreateFormCtrl', function($rootScope, $scope, apiService, ka
     }
 
     $scope.createRoom = function () {
-        console.log("userinfo?");
-        console.log(kakaoService.userInfo.id);
-        var userId = kakaoService.userInfo.id;
+        var userInfo = kakaoService.userInfo();
+        var userId = userInfo.id;
         if (!userId) {
             alert("로그인을 먼저 해주세요");
             return;

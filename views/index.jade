@@ -24,7 +24,7 @@ block content
                       | 링크 (클릭하면 톡 시작!)
                     th
                       | 생성일자
-                    th
+                    th(style="width: 50px;")
                 tbody
                   tr(ng-repeat='item in rooms track by item._id')
                     //td= val.id
@@ -32,7 +32,7 @@ block content
                     td
                       a(href= '{{item.url}}', target='_blank') {{item.url}}
                     td {{item.created | date:'yyyy.MM.dd HH:mm'}}
-                    td(ng-if='isMyRoom($index)')
+                    td(style="width: 50px;", ng-if='isMyRoom($index)')
                       button(ng-click='deleteRoom($index)') 삭제
                     //td= val.url
                     //td {{item.created | date:'yyyy.MM.dd HH:mm:ss Z'}}
