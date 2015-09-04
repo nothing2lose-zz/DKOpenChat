@@ -31,12 +31,20 @@ var createRoom = function(name, url, categoryType, authorId, cb) {
         }
     });
 }
+
+var removeRoom = function(roomId, cb) {
+    Room.remove({_id: roomId}).exec(function (err, result) {
+        cb(err, result);
+    });
+}
+
 /**
  * Module exports.
  */
 
 module.exports = {
     createRoom: createRoom,
+    removeRoom: removeRoom,
     allRoomsByCategoryType: allRoomsByCategoryType,
     allRooms: allRooms
 }

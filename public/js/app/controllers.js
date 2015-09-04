@@ -41,16 +41,31 @@ app.service('apiService', function ($http) {
                 return response.data;
             });
             return promise;
+        },
+        deleteRoom: function(room) {
+            var promise = $http.delete('/api/rooms/' + room._id).then(function (response) {
+                cachedItems.insert(0, response.data);
+                return response.data;
+            });
+            return promise;
         }
     };
     return myService;
 });
 
 // Kakao
-app.service('kakaoService', function() {
+app.service('kakaoService', function($rootScope) {
     Kakao.init('8e733c4e965021e9c7775cf635eba63f');
-    var userInfo = {};
+    var local = { authorized : false, userInfo : {} };
+    var authorized = function () { return local.authorized };
+    var setAuthorized = function ( isAuthorized ) {
+        local.authorized = isAuthorized;
+        $rootScope.$broadcast("didChangeAuthState", isAuthorized);
+    }
+    var userInfo = function() { return local.userInfo };
+
     var svc = {
+        authorized: authorized,
         userInfo: userInfo,
         auth: function(cb) {
             Kakao.Auth.login({
@@ -67,7 +82,7 @@ app.service('kakaoService', function() {
         },
         logout: function(cb) {
             Kakao.Auth.logout(function(){
-
+                setAuthorized(false);
                 console.log("-- logout");
                 cb(null, null);
             });
@@ -76,6 +91,10 @@ app.service('kakaoService', function() {
             Kakao.API.request({
                 url: "/v1/user/me",
                 success: function(info) {
+                    local.userInfo = info;
+                    setAuthorized(true);
+                    //console.log("user nfo ----");
+                    //console.log(local.userInfo);
                     cb(null, info);
                 },
                 fail: function(err) {
@@ -141,10 +160,11 @@ app.controller('RoomCreateFormCtrl', function($rootScope, $scope, apiService, ka
 
     $scope.createRoom = function () {
         console.log("userinfo?");
-        console.log(kakaoService.userInfo);
-        var userId = kakaoService.userInfo["id"];
+        console.log(kakaoService.userInfo.id);
+        var userId = kakaoService.userInfo.id;
         if (!userId) {
             alert("로그인을 먼저 해주세요");
+            return;
         }
         console.log("==== userid : " + userId);
         apiService.postRoom($scope.form.name, $scope.form.url, $scope.selectedCategory.type, userId).then(
@@ -164,6 +184,11 @@ app.controller("AppCtrl", function($rootScope, $scope, $http, apiService, kakaoS
     $scope.form = { name: "", url: "" }; // post room form
     $scope.selectedMenu = {}; // for get request
 
+    $rootScope.$on('didChangeAuthState', function(event, authorized) {
+        //console.log("========= auth state changed!");
+        if (!$scope.$$phase) $scope.$apply();
+    });
+
     $rootScope.$on('didLoadCategory', function(event, currentMenu, menus) {
         $scope.loadRooms();
     });
@@ -178,9 +203,17 @@ app.controller("AppCtrl", function($rootScope, $scope, $http, apiService, kakaoS
         $scope.rooms = apiService.items();
     });
 
+    $scope.isMyRoom = function(index) {
+        var room = $scope.rooms[index];
+        if (kakaoService.authorized()) {
+            var userInfo = kakaoService.userInfo();
+            return room.author_id === userInfo["id"];
+        } else {
+            return false;
+        }
+    }
 
-
-    // get room
+    // API
     $scope.loadRooms = function() {
         // data initialize
         var categoryType = $scope.selectedMenu.type;
@@ -191,6 +224,21 @@ app.controller("AppCtrl", function($rootScope, $scope, $http, apiService, kakaoS
             console.log("request error");
         });
     };
+
+    $scope.deleteRoom = function(index) {
+        if ($scope.isMyRoom(index)) {
+            var room = $scope.rooms[index];
+            apiService.deleteRoom(room).then(function(result) {
+                $scope.loadRooms(); // remove index?
+            },
+            function(err){
+                alert("삭제에 실패하였습니다.");
+            });
+        } else {
+            alert("내 소유의 방이 아닙니다.");
+        }
+
+    }
 
 });
 
@@ -204,7 +252,7 @@ app.controller("AuthCtrl", function($scope, kakaoService) {
 
                 kakaoService.getUserInfo(function(err, result){
                     if (result) {
-                        kakaoService.userInfo = result;
+
                     }
                 });
             }

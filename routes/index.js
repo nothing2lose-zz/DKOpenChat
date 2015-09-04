@@ -61,6 +61,17 @@ router.post('/api/rooms', function (req, res) {
     });
 });
 
+router.delete('/api/rooms/:id', function (req, res) {
+    var id = req.params.id;
+    roomCtrler.removeRoom(id, function(err, result) {
+        if (err) {
+            res.status(500).send(err.message);
+        } else {
+            res.status(200).send(JSON.stringify(result));
+        }
+    });
+});
+
 
 // TODO?
 router.get('/oauth', function (req, res, next) {
