@@ -12,8 +12,8 @@ var allRoomsByCategoryType = function (categoryType, cb) {
     });
 }
 
-var createRoom = function(name, url, categoryType, cb) {
-    var room = new Room({ name: name, url: url});
+var createRoom = function(name, url, categoryType, authorId, cb) {
+    var room = new Room({ name: name, url: url, author_id: authorId});
     if (categoryType) {
         room.cate_type = categoryType;
     }

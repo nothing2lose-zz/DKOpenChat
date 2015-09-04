@@ -51,7 +51,8 @@ router.post('/api/rooms', function (req, res) {
     var name = req.body.name;
     var url = req.body.url;
     var categoryType = req.body.category_type;
-    roomCtrler.createRoom(name, url, categoryType, function (err, result) {
+    var authorId = req.body.author_id;
+    roomCtrler.createRoom(name, url, categoryType, authorId, function (err, result) {
         if (err) {
             res.status(500).send(err.message);
         } else {

@@ -35,8 +35,8 @@ app.service('apiService', function ($http) {
             // Return the promise to the controller
             return promise;
         },
-        postRoom: function(name, url, categoryType) {
-            var promise = $http.post('/api/rooms', { name: name, url: url, category_type: categoryType }).then(function (response) {
+        postRoom: function(name, url, categoryType, userId) {
+            var promise = $http.post('/api/rooms', { name: name, url: url, category_type: categoryType, author_id: userId }).then(function (response) {
                 cachedItems.insert(0, response.data);
                 return response.data;
             });
@@ -49,7 +49,9 @@ app.service('apiService', function ($http) {
 // Kakao
 app.service('kakaoService', function() {
     Kakao.init('8e733c4e965021e9c7775cf635eba63f');
+    var userInfo = {};
     var svc = {
+        userInfo: userInfo,
         auth: function(cb) {
             Kakao.Auth.login({
                 persistAccessToken: true,
@@ -124,7 +126,7 @@ app.controller('MenuCtrl', function($rootScope, $scope, apiService) {
 
 });
 
-app.controller('RoomCreateFormCtrl', function($rootScope, $scope, apiService) {
+app.controller('RoomCreateFormCtrl', function($rootScope, $scope, apiService, kakaoService) {
     $scope.menus = [];
     $scope.form = { name: "", url: "" }; // post room form
     $scope.selectedCategory = {};
@@ -138,9 +140,15 @@ app.controller('RoomCreateFormCtrl', function($rootScope, $scope, apiService) {
     }
 
     $scope.createRoom = function () {
-        apiService.postRoom($scope.form.name, $scope.form.url, $scope.selectedCategory.type ).then(
+        console.log("userinfo?");
+        console.log(kakaoService.userInfo);
+        var userId = kakaoService.userInfo["id"];
+        if (!userId) {
+            alert("로그인을 먼저 해주세요");
+        }
+        console.log("==== userid : " + userId);
+        apiService.postRoom($scope.form.name, $scope.form.url, $scope.selectedCategory.type, userId).then(
             function(result){
-                //
                 $rootScope.$broadcast("didChangeRoomData");
             },
             function (err) {
@@ -195,7 +203,9 @@ app.controller("AuthCtrl", function($scope, kakaoService) {
                 if (!$scope.$$phase) $scope.$apply();
 
                 kakaoService.getUserInfo(function(err, result){
-
+                    if (result) {
+                        kakaoService.userInfo = result;
+                    }
                 });
             }
             console.log("kakao login result");
