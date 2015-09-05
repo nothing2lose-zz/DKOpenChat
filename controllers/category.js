@@ -10,8 +10,8 @@ var allCategories = function(cb) {
  * name: String
  * type: Number
  * */
-var createCategory = function(name, type, cb) {
-    var cate = new Category({ name: name, type: type});
+var createCategory = function(name, type, order, cb) {
+    var cate = new Category({ name: name, type: type, order: order });
     cate.save(function(err, result) {
         if (err) {
             if (err.code === 11000) {

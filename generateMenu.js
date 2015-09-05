@@ -19,13 +19,13 @@ var menus = [
 
 for (var index in menus) {
     var menu = menus[index];
-    (function(name, type) {
-        categoryCtrl.createCategory(name, type, function(err, result) {
+    (function(name, type, order) {
+        categoryCtrl.createCategory(name, type, order,  function(err, result) {
             if (err) {
                 //console.log("실패한 결과가 있네요.");
             }
         });
-    })(menu.name, menu.type)
+    })(menu.name, menu.type, menu.order)
 }
 
 

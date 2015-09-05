@@ -17,6 +17,9 @@ app.service('apiService', function ($http) {
         return {}
     }
     var myService = {
+        reset: function() {
+            cachedItems.length = 0;
+        },
         items: function () {
             return cachedItems;
         },
@@ -193,6 +196,10 @@ app.controller("AppCtrl", function($rootScope, $scope, $http, apiService, kakaoS
     $scope.rooms = []; // room list
     $scope.form = { name: "", url: "" }; // post room form
     $scope.selectedMenu = {}; // for get request
+    $scope.reset = function () { // refresh
+        $scope.rooms.length = 0;
+        $scope.reachOfEnd = false;
+    }
 
     $rootScope.$on('didChangeAuthState', function(event, authorized) {
         //console.log("========= auth state changed!");
@@ -205,6 +212,9 @@ app.controller("AppCtrl", function($rootScope, $scope, $http, apiService, kakaoS
 
     $rootScope.$on('didChangeCategory', function(event, selectedMenu, menus) {
         $scope.selectedMenu = selectedMenu;
+
+        $scope.reset();
+        apiService.reset();
         //console.log("==== retreive menu changed notification "+ menuIndex);
         $scope.loadRooms();
     });
