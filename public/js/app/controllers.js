@@ -10,6 +10,12 @@ Array.prototype.insert = function (index, item) {
 // API
 app.service('apiService', function ($http) {
     var cachedItems = [];
+    var lastItem = function () {
+        if (cachedItems.length > 0) {
+            return cachedItems[cachedItems.length - 1]
+        }
+        return {}
+    }
     var myService = {
         items: function () {
             return cachedItems;
@@ -20,15 +26,19 @@ app.service('apiService', function ($http) {
             });
             return promise;
         },
-        getRooms: function(categoryType) {
+        getRooms: function(categoryType, limit) {
+            var last = lastItem();
+            //console.log("====== last");
+            //console.log(last);
             var promise;
             //if ( !promise ) {
                 // $http returns a promise, which has a then function, which also returns a promise
-                promise = $http.get('/api/rooms',{ params: { category_type: categoryType } }).then(function (response) {
+                promise = $http.get('/api/rooms',{ params: { category_type: categoryType, start_at: last.created, limit: limit  } }).then(function (response) {
                     // The then function here is an opportunity to modify the response
                     //console.log(response);
                     // The return value gets picked up by the then in the controller.
-                    cachedItems = response.data;
+                    //cachedItems = response.data;
+                    cachedItems = cachedItems.concat(response.data);
                     return response.data;
                 });
             //}
@@ -178,7 +188,8 @@ app.controller('RoomCreateFormCtrl', function($rootScope, $scope, apiService, ka
 });
 
 app.controller("AppCtrl", function($rootScope, $scope, $http, apiService, kakaoService) {
-
+    var pageLimit = 100;
+    $scope.reachOfEnd = false;
     $scope.rooms = []; // room list
     $scope.form = { name: "", url: "" }; // post room form
     $scope.selectedMenu = {}; // for get request
@@ -212,12 +223,34 @@ app.controller("AppCtrl", function($rootScope, $scope, $http, apiService, kakaoS
         }
     }
 
+    /**
+     * scroll end event */
+    $(window).scroll(function() {
+        if($(window).scrollTop() + $(window).height() == $(document).height()) {
+            //alert("bottom!");
+
+            if (false === $scope.reachOfEnd) {
+                console.log("more load! : " + $scope.rooms.length);
+                $scope.loadRooms();
+            }
+
+        }
+    });
+    /* === */
+
     // API
     $scope.loadRooms = function() {
         // data initialize
         var categoryType = $scope.selectedMenu.type;
-        apiService.getRooms(categoryType).then(function(result) {
-            $scope.rooms = result;
+        apiService.getRooms(categoryType, pageLimit).then(function(result) {
+            //$scope.rooms.concat(result);
+            //console.log();
+            $scope.rooms = $scope.rooms.concat(result);
+            console.log(result);
+            if (result.length < pageLimit) {
+                console.log("======= reach of end!?");
+                $scope.reachOfEnd = true;
+            }
             //if (!$scope.$$phase) $scope.$apply();
         }, function(err) {
             console.log("request error");

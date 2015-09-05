@@ -25,26 +25,19 @@ router.get('/api/categories', function (req, res) {
 
 // route rooms
 router.get('/api/rooms', function (req, res) {
+    var startAt      = req.query.start_at;
+    var limit        = req.query.limit;
     var categoryType = req.query.category_type;
     if (categoryType === undefined || 0  == categoryType) {
-        roomCtrler.allRooms(function (err, results) {
-            if (null === err) {
-                res.status(200).send(JSON.stringify(results));
-            } else {
-                res.status(500).send(err.message);
-            }
-        });
-
-    } else {
-        roomCtrler.allRoomsByCategoryType(categoryType, function (err, results) {
-            if (null === err) {
-                res.status(200).send(JSON.stringify(results));
-            } else {
-                res.status(500).send(err.message);
-            }
-        });
+        categoryType = undefined;
     }
-
+    roomCtrler.allRoomsByCategoryType(categoryType, startAt, limit, function (err, results) {
+        if (null === err) {
+            res.status(200).send(JSON.stringify(results));
+        } else {
+            res.status(500).send(err.message);
+        }
+    });
 });
 
 router.post('/api/rooms', function (req, res) {

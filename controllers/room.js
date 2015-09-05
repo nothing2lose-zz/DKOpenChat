@@ -1,13 +1,13 @@
 var Room = require('../models/rooms');
 
-var allRooms = function(cb) {
-    Room.find({}).sort([['created', 'descending']]).exec(function(err, results) {
-        cb(err, results);
-    });
-}
+var allRoomsByCategoryType = function (categoryType, startAt, limit, cb) {
+    var query = {};
+    if (categoryType) { query.cate_type = categoryType; }
+    if (startAt) { query.created = { "$lt": startAt } }
 
-var allRoomsByCategoryType = function (categoryType, cb) {
-    Room.find({cate_type: categoryType}).sort([['created', 'descending']]).exec(function(err, results) {
+    var cursor = Room.find(query).sort([[ 'created', 'descending']]);
+    if (limit) { cursor = cursor.limit(limit) }
+    cursor.exec(function(err, results) {
         cb(err, results);
     });
 }
@@ -46,5 +46,4 @@ module.exports = {
     createRoom: createRoom,
     removeRoom: removeRoom,
     allRoomsByCategoryType: allRoomsByCategoryType,
-    allRooms: allRooms
 }

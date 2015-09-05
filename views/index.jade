@@ -29,6 +29,7 @@ block content
                       | 생성일자
                     th(style="width: 5%;")
                 tbody
+                  //tr(ng-repeat='item in rooms track by item._id')
                   tr(ng-repeat='item in rooms track by item._id')
                     //td= val.id
                     //td {{item.name}}
