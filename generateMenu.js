@@ -4,10 +4,15 @@
 var categoryCtrl = require('./controllers/category');
 
 var menus = [
-    { "name": "전체보기",   type:0 },
-    { "name": "잡담",     type:100 },
-    { "name": "친목",     type:101 },
-    { "name": "기타",    type:3000 } // warning! '3000' default value hardcoded on `rooms` schema.
+    { "name": "전체보기",   type:0 , order: 0 },
+    { "name": "잡담",     type:100, order: 1 },
+    { "name": "친목",     type:101, order: 2 },
+    { "name": "정치",     type:105, order: 3 },
+    { "name": "사회",     type:110, order: 4 },
+    { "name": "연예",     type:115, order: 5 },
+    { "name": "이슈",     type:120, order: 6 },
+    { "name": "뉴스",     type:125, order: 7 },
+    { "name": "기타",    type:3000, order: 8 } // warning! '3000' default value hardcoded on `rooms` schema.
 ]
 
 

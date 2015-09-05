@@ -6,6 +6,10 @@ var schema = mongoose.Schema({
         unique: true,
         required: true
     },
+    order: {
+        type: Number,
+        required: true,
+    },
     type: {
         type: Number,
         unique: true,

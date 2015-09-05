@@ -1,7 +1,7 @@
 var Category = require(__dirname + '/../models/category');
 
 var allCategories = function(cb) {
-    Category.find({}).sort([['created', 'ascending']]).exec(function(err, results) {
+    Category.find({}).sort([['order', 'ascending']]).exec(function(err, results) {
         cb(err, results);
     });
 }
